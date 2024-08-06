@@ -34,11 +34,17 @@ body {
     margin-bottom: 4px;
 }
 .variable__name {
-    display: inline-block;
+    display: block;
     padding: 2px 4px;
-    min-width: 60px;
+    flex: 60px 0 0;
     background: #bae6fd;
     margin-right: 2px;
+}
+.variable__title {
+    flex: 100% 0 1;
+    max-width: calc(100% - 76px);
+    display: block;
+    overflow: auto;
 }
 .variable__type::before {
     display: inline-block;
@@ -55,6 +61,15 @@ body {
 }
 .type__integer::before{
     content: 'int';
+}
+.type__string {
+    font-family: monospace;
+    unicode-bidi: isolate;
+    white-space: pre;
+    overflow-x: auto;
+}
+.code-block {
+    overflow: auto;
 }
 .code li.current{
     background: #e0f2fe;

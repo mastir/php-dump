@@ -13,7 +13,7 @@ class PhpDumpBuilder
     {
         if (!$readers){
             $readers = [
-                new ThrowableReader(ThrowableReader::TRACE_NONE),
+                new ThrowableReader(ThrowableReader::TRACE_STRING),
                 new SimpleReader()
             ];
         }
