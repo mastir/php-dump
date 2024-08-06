@@ -11,10 +11,10 @@ class PhpDumpBuilder
 
     public function __construct(public readonly PhpDump $dump = new PhpDump(), ?array $readers = null)
     {
-        if (!$readers){
+        if (!$readers) {
             $readers = [
                 new ThrowableReader(ThrowableReader::TRACE_STRING),
-                new SimpleReader()
+                new SimpleReader(),
             ];
         }
         $this->dump->readers = $readers;
@@ -22,7 +22,6 @@ class PhpDumpBuilder
 
     /**
      * @param list<int> $includes
-     * @return void
      */
     public function include(array $includes): void
     {
@@ -34,13 +33,13 @@ class PhpDumpBuilder
         return $this->dump->build($this->includes);
     }
 
-    public function addException(\Throwable $exception, $withPrevious = true) : PhpDumpScope
+    public function addException(\Throwable $exception, $withPrevious = true): PhpDumpScope
     {
         do {
             $scope = $this->dump->addScope($exception->getMessage(), ['exception' => $exception]);
             $pre_lines = min($exception->getLine(), 5);
             $start = $exception->getLine() - $pre_lines;
-            $scope->addScope($exception->getFile() . ':' . $exception->getLine(), [], [
+            $scope->addScope($exception->getFile().':'.$exception->getLine(), [], [
                 'code' => $this->getFileCode($exception->getFile(), $start, $pre_lines + 4),
                 'file' => $exception->getFile(),
                 'line' => $exception->getLine(),
@@ -52,7 +51,7 @@ class PhpDumpBuilder
                 $args = [];
                 if ($trace['function'] ?? false) {
                     if ($trace['class'] ?? false) {
-                        $title .= $trace['class'] . ($trace['type'] ?? '::');
+                        $title .= $trace['class'].($trace['type'] ?? '::');
                     }
                     $title .= $trace['function'];
                     if ($trace['args'] ?? false) {
@@ -61,25 +60,25 @@ class PhpDumpBuilder
                         $display = [];
                         $count = count($trace['args']);
                         $args = array_values($trace['args']);
-                        foreach($ref->getParameters() as $k=>$param) {
+                        foreach ($ref->getParameters() as $k => $param) {
                             $pre = '';
-                            if ($param->isVariadic()){
+                            if ($param->isVariadic()) {
                                 $pre = '...';
                                 $new_args = array_slice($args, 0, $k);
                                 $array = [];
-                                for($i=0;$i<$count;$i++){
-                                    $array[] = $args[$k+$i];
+                                for ($i = 0; $i < $count; ++$i) {
+                                    $array[] = $args[$k + $i];
                                 }
                                 $new_args[] = $array;
                                 $args = $new_args;
                             } else {
-                                $count--;
+                                --$count;
                             }
                             $names[] = $param->getName();
-                            $display[] = $pre.($param->getType() === null ? '$'.$param->getName() : $param->getType().' $'.$param->getName());
-                        };
+                            $display[] = $pre.(null === $param->getType() ? '$'.$param->getName() : $param->getType().' $'.$param->getName());
+                        }
                         $args = array_combine($names, $args);
-                        $title .= '(' . implode(', ', $display) . ')';
+                        $title .= '('.implode(', ', $display).')';
                     } else {
                         $title .= '()';
                     }
@@ -87,11 +86,11 @@ class PhpDumpBuilder
                     $title .= '(anonymous)';
                 }
                 if ($trace['file'] ?? false) {
-                    $title .= ' in ' . $trace['file'];
+                    $title .= ' in '.$trace['file'];
                     $extras['file'] = $trace['file'];
                     if ($trace['line'] ?? false) {
                         $extras['line'] = $trace['line'];
-                        $title .= ':' . $trace['line'];
+                        $title .= ':'.$trace['line'];
                         $pre_lines = min($trace['line'], 7);
                         $start = $trace['line'] - $pre_lines;
                         $extras['code'] = $this->getFileCode($trace['file'], $start, $pre_lines + 4);
@@ -102,6 +101,7 @@ class PhpDumpBuilder
                 $scope->addScope($title, $args, $extras);
             }
         } while ($withPrevious && $exception = $exception->getPrevious());
+
         return $scope;
     }
 
@@ -109,15 +109,19 @@ class PhpDumpBuilder
     {
         $file = new \SplFileObject($file);
         $file->seek($start_line);
-        if ($max_line_length > 0) $file->setMaxLineLen($max_line_length);
+        if ($max_line_length > 0) {
+            $file->setMaxLineLen($max_line_length);
+        }
         $code = '';
-        for($i = 0; $i < $limit; $i++) {
-            if($file->eof())break;
-            $code .= $file->current(); //add \n?
+        for ($i = 0; $i < $limit; ++$i) {
+            if ($file->eof()) {
+                break;
+            }
+
+            $code .= $file->current(); // add \n?
             $file->next();
         }
+
         return $code;
     }
-
-
 }

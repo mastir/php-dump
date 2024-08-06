@@ -2,32 +2,30 @@
 
 namespace Mastir\PhpDump;
 
-use ArrayIterator;
 use Ds\Vector;
-use IteratorAggregate;
-use Traversable;
 
-class PhpDumpScope implements IteratorAggregate
+/**
+ * @template-implements \IteratorAggregate<int, PhpDumpScope>
+ */
+class PhpDumpScope implements \IteratorAggregate
 {
     /**
-     * @var Vector<PhpDumpScope>
+     * @var list<PhpDumpScope>
      */
-    private Vector $scopes;
+    private array $scopes;
 
     /**
-     * @param string $title
      * @param array<string,mixed> $vars
      * @param array<string,mixed> $extra
      */
-    public function __construct(public readonly string $title, public readonly array $vars, public readonly array $extra = []){
-        $this->scopes = new Vector();
+    public function __construct(public readonly string $title, public readonly array $vars, public readonly array $extra = [])
+    {
+        $this->scopes = [];
     }
 
     /**
-     * @param string $title
      * @param array<string,mixed> $vars
      * @param array<string,mixed> $extra
-     * @return PhpDumpScope
      */
     public function addScope(string $title, array $vars, array $extra = []): PhpDumpScope
     {
@@ -35,11 +33,10 @@ class PhpDumpScope implements IteratorAggregate
     }
 
     /**
-     * @return ArrayIterator<PhpDumpScope>
+     * @return \Traversable<int,PhpDumpScope>
      */
-    public function getIterator(): Traversable
+    public function getIterator(): \Traversable
     {
-        return new ArrayIterator($this->scopes->toArray());
+        return new \ArrayIterator($this->scopes);
     }
-
 }

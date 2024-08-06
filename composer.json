@@ -21,11 +21,12 @@
         "ext-zlib": "*"
     },
     "require-dev": {
-        "captainhook/captainhook-phar": "^5.23",
-        "captainhook/plugin-composer": "^5.3",
+        "friendsofphp/php-cs-fixer": "*",
+        "phpro/grumphp": "*",
         "phpstan/phpstan-strict-rules": "^1.0",
         "phpunit/php-code-coverage": "^10",
-        "phpunit/phpunit": "^10"
+        "phpunit/phpunit": "^10",
+        "vimeo/psalm": "^5"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
@@ -43,25 +44,11 @@
         "allow-plugins": {
             "php-http/discovery": true,
             "dealerdirect/phpcodesniffer-composer-installer": true,
-            "ramsey/composer-repl": true,
             "phpstan/extension-installer": true,
-            "ergebnis/composer-normalize": true,
-            "captainhook/plugin-composer": true,
-            "ramsey/devtools": true,
-            "captainhook/captainhook-phar": true
+            "captainhook/captainhook-phar": false,
+            "captainhook/plugin-composer": false,
+            "phpro/grumphp": true
         },
         "sort-packages": true
-    },
-    "extra": {
-        "captainhook": {
-            "force-install": true
-        },
-        "ramsey/conventional-commits": {
-            "configFile": "conventional-commits.json"
-        },
-        "ramsey/devtools": {
-            "command-prefix": "dev",
-            "memory-limit": "-1"
-        }
     }
 }

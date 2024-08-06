@@ -2,12 +2,9 @@
 
 namespace Mastir\PhpDump\Reader;
 
-use ReflectionClass;
-
 class SimpleReader implements ObjectReader
 {
-
-    public function canRead(ReflectionClass $class): bool
+    public function canRead(\ReflectionClass $class): bool
     {
         return true;
     }

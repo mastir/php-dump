@@ -2,15 +2,7 @@
 
 namespace Mastir\PhpDump;
 
-
-use Exception;
-use Generator;
-use Iterator;
 use IteratorAggregate;
-use RuntimeException;
-use Traversable;
-
-use function count;
 
 /**
  * @template TKey
@@ -18,14 +10,14 @@ use function count;
  *
  * @implements IteratorAggregate<int, T>
  */
-class RecursiveIteratorAggregateIterator implements IteratorAggregate
+class RecursiveIteratorAggregateIterator implements \IteratorAggregate
 {
     private int $depth = -1;
 
     /**
-     * @param Traversable<TKey,T> $input
+     * @param \Traversable<TKey,T> $input
      */
-    public function __construct(private readonly Traversable $input) {}
+    public function __construct(private readonly \Traversable $input) {}
 
     public function getDepth(): int
     {
@@ -33,16 +25,17 @@ class RecursiveIteratorAggregateIterator implements IteratorAggregate
     }
 
     /**
-     * @return Generator<int,T>
-     * @throws Exception
+     * @return \Generator<int,T>
+     *
+     * @throws \Exception
      */
-    public function getIterator(): Generator
+    public function getIterator(): \Generator
     {
         $stack = [];
         $iterator = $this->findIterator($this->input);
 
         while (true) {
-            while (null !== $iterator && $iterator->valid() === false) {
+            while (null !== $iterator && false === $iterator->valid()) {
                 $iterator = array_pop($stack);
             }
 
@@ -53,12 +46,12 @@ class RecursiveIteratorAggregateIterator implements IteratorAggregate
                 return;
             }
             $current = $iterator->current();
-            $this->depth = count($stack);
+            $this->depth = \count($stack);
 
             yield $current;
             $iterator->next();
 
-            if ($current instanceof Traversable) {
+            if ($current instanceof \Traversable) {
                 $stack[] = $iterator;
                 $iterator = $this->findIterator($current);
             }
@@ -66,17 +59,17 @@ class RecursiveIteratorAggregateIterator implements IteratorAggregate
     }
 
     /**
-     * @param Traversable<mixed> $input
-     * @return Iterator
-     * @throws Exception
+     * @param \Traversable<mixed> $input
+     *
+     * @throws \Exception
      */
-    private function findIterator(Traversable $input): Iterator
+    private function findIterator(\Traversable $input): \Iterator
     {
         $prev = null;
 
-        while (!($input instanceof Iterator)) {
-            if ($prev === $input || !($input instanceof IteratorAggregate)) {
-                throw new RuntimeException('Invalid iterator');
+        while (!$input instanceof \Iterator) {
+            if ($prev === $input || !($input instanceof \IteratorAggregate)) {
+                throw new \RuntimeException('Invalid iterator');
             }
             $prev = $input;
             $input = $input->getIterator();
