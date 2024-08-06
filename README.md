@@ -1,9 +1,8 @@
 <h1 align="center">mastir/php-dump</h1>
 
 <p align="center">
-    <strong>Tool to convert app scoupes into binary readable data dump</strong>
+    <strong>Tool to create small dump of your php application</strong>
 </p>
-
 <!--
 TODO: Make sure the following URLs are correct and working for your project.
       Then, remove these comments to display the badges, giving users a quick
@@ -20,6 +19,28 @@ TODO: Make sure the following URLs are correct and working for your project.
 </p>
 -->
 
+
+<h3>Use cases</h3>
+<ul>
+    <li>Visualise application exceptions</li>
+    <li>Save exception dump for later processing</li>
+    <li>Attach dump in bug tracking system</li>
+    <li>Dump request data to reproduce bugs</li>
+    <li>Review and compare dumps</li>
+</ul>
+
+<h3>Basic usage</h3>
+<ol>
+    <li>Create dump (binary string) using PhpDumpBuilder </li>
+    <li>Save/transfer dump (optional)</li>
+    <li>Read dump using php-dump.js</li>
+    <li>Render dump using react components in php-dump.jsx</li>
+</ol>
+
+
+See example in [public/index.php](public/index.php)
+
+![](public/php-dump.gif)
 
 ## About
 

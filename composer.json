@@ -1,6 +1,6 @@
 {
     "name": "mastir/php-dump",
-    "description": "Tool to convert app scoupes into binary readable data dump",
+    "description": "Tool to convert app scopes into binary readable data dump",
     "license": "MIT",
     "type": "library",
     "keywords": [
@@ -11,7 +11,7 @@
     ],
     "authors": [
         {
-            "name": "Yevhen",
+            "name": "Yevhen pochekuiev",
             "email": "themastir@gmail.com"
         }
     ],
