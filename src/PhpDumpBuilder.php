@@ -2,12 +2,22 @@
 
 namespace Mastir\PhpDump;
 
+use Mastir\PhpDump\Reader\SimpleReader;
+use Mastir\PhpDump\Reader\ThrowableReader;
+
 class PhpDumpBuilder
 {
     private array $includes = [];
 
-    public function __construct(public readonly PhpDump $dump = new PhpDump())
+    public function __construct(public readonly PhpDump $dump = new PhpDump(), ?array $readers = null)
     {
+        if (!$readers){
+            $readers = [
+                new ThrowableReader(ThrowableReader::TRACE_NONE),
+                new SimpleReader()
+            ];
+        }
+        $this->dump->readers = $readers;
     }
 
     /**

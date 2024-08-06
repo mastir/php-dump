@@ -13,3 +13,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
  - js: dump reader
  - demo output with react
  - PhpDumpBuilder
+
+## 0.2.0
+
+### Added
+
+ - ObjectReader
+ - SimpleReader
+ - ThrowableReader
+
+### Fixed
+
+ - null block

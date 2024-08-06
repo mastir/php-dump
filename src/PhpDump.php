@@ -4,6 +4,7 @@ namespace Mastir\PhpDump;
 
 use ArrayIterator;
 use Ds\Vector;
+use Mastir\PhpDump\Reader\ObjectReader;
 
 /**
  * Describes any php structures
@@ -43,7 +44,12 @@ class PhpDump
     public int $size_limit = 500000; //500kb
     public int $preload_depth = 1;
 
-    private int $titleLengthLimit = 100;
+    public int $titleLengthLimit = 100;
+
+    /**
+     * @var ObjectReader[]
+     */
+    public array $readers = [];
 
     /**
      * @var Vector<PhpDumpScope>
@@ -166,13 +172,18 @@ class PhpDump
 
     private function getObjectProps(object $value) : array
     {
-        return get_object_vars($value);
+        $ref = new \ReflectionClass($value);
+        foreach ($this->readers as $reader) {
+            if($reader->canRead($ref))
+                return $reader->read($value);
+        }
+        return [];
     }
 
 
     public function value(mixed $input) : string
     {
-        if($input === null)return "\x01n";
+        if($input === null)return $this->block("n");
         if(is_scalar($input))return $this->scalar($input);
         if(is_resource($input))return $this->resource($input);
         if(is_array($input))return $this->array($input);
