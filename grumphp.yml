@@ -1,0 +1,2 @@
+grumphp:
+    tasks: { phpcsfixer: { diff: true, config: .php-cs-fixer.dist.php}, composer: null, phpunit: null, phpstan: null, psalm: null }
