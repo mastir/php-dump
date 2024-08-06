@@ -1,0 +1,67 @@
+{
+    "name": "mastir/php-dump",
+    "description": "Tool to convert app scoupes into binary readable data dump",
+    "license": "MIT",
+    "type": "library",
+    "keywords": [
+        "php",
+        "debug",
+        "dump",
+        "tool"
+    ],
+    "authors": [
+        {
+            "name": "Yevhen",
+            "email": "themastir@gmail.com"
+        }
+    ],
+    "require": {
+        "php": "^8.1",
+        "php-ds/php-ds": "^1.5",
+        "ext-zlib": "*"
+    },
+    "require-dev": {
+        "captainhook/captainhook-phar": "^5.23",
+        "captainhook/plugin-composer": "^5.3",
+        "phpstan/phpstan-strict-rules": "^1.0",
+        "phpunit/php-code-coverage": "^10",
+        "phpunit/phpunit": "^10"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "autoload": {
+        "psr-4": {
+            "Mastir\\PhpDump\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Mastir\\Test\\PhpDump\\": "tests/"
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "php-http/discovery": true,
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "ramsey/composer-repl": true,
+            "phpstan/extension-installer": true,
+            "ergebnis/composer-normalize": true,
+            "captainhook/plugin-composer": true,
+            "ramsey/devtools": true,
+            "captainhook/captainhook-phar": true
+        },
+        "sort-packages": true
+    },
+    "extra": {
+        "captainhook": {
+            "force-install": true
+        },
+        "ramsey/conventional-commits": {
+            "configFile": "conventional-commits.json"
+        },
+        "ramsey/devtools": {
+            "command-prefix": "dev",
+            "memory-limit": "-1"
+        }
+    }
+}

@@ -1,0 +1,73 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+#root {
+    background: #d6d3d1;
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.php-dump{
+    border: 1px solid #a8a29e;
+    background: #fafaf9;
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 24px;
+}
+
+.scope {
+    border: 1px solid #e0f2fe;
+    padding: 4px 16px;
+}
+.scope > h4 {
+    margin: 0 0 16px;
+}
+.variable {
+    display: flex;
+    flex-direction: row;
+    border: 1px solid #7dd3fc;
+    border-radius: 4px;
+    margin-bottom: 4px;
+}
+.variable__name {
+    display: inline-block;
+    padding: 2px 4px;
+    min-width: 60px;
+    background: #bae6fd;
+    margin-right: 2px;
+}
+.variable__type::before {
+    display: inline-block;
+    color: #075985;
+    background: #f0f9ff;
+    padding: 1px 4px;
+    margin: 0 2px 0 0;
+    border: 1px solid #075985;
+    border-radius: 4px;
+    font-size: 12px;
+}
+.type__float::before{
+    content: 'float';
+}
+.type__integer::before{
+    content: 'int';
+}
+.code li.current{
+    background: #e0f2fe;
+}
+.code li.current::marker{
+    color: #0ea5e9;
+}
+.accordion{
+    cursor: pointer;
+}
+.accordion::before{
+    content: '⮞ ';
+}
+.accordion.open, .open > .accordion::before{
+    content: '⮟ ';
+}

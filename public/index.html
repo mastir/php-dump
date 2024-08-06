@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>PHP Dump</title>
+    <script src="https://unpkg.com/zlibjs@0.3.1/bin/gunzip.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="./php-dump.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <script type="text/babel" src="./php-dump.jsx"></script>
+    <link rel="stylesheet" href="./php-dump.css" />
+    <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@11.9.0/styles/mono-blue.min.css">
+    <script src="https://unpkg.com/@highlightjs/cdn-assets@11.9.0/highlight.min.js"></script>
+    <script src="https://unpkg.com/@highlightjs/cdn-assets@11.9.0/languages/php.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/highlightjs-line-numbers.js@2.8.0/dist/highlightjs-line-numbers.min.js"></script>
+
+</head>
+<body>
+    <div id="root"></div>
+    <script>
+        window.dump_base64 = "H4sIAAAAAAAAA81X624bVRDe42TTxm0pFBWRH0gHyygb2Nj12rm3AXGRQAgEolRCSWStd0/iQ5xddy9OWhTxi0fgGXgN3oM/iLdAIIWZc1l7baftghthaW/nMjvfNzPfrMnju4ZhPGRxQtmZx/oJDwOadKPwNCAwQQaLcM5miAlPRohjn+ixUok8fg8G6t3whNVZehTUT1mn3u/2V/30pF/vp50e9+o88NlZDUa3mxvERNvu13Da80KfbVfOy17PjWOaWa3VahWbHvIeTE5YlpM9HjAwZlM00ZZPzsE8GC2hl+DWo1E/HyIoFq3uttteGMRJlHqJBZaqbnQUr1Ae0BdG4KwRs5QheL6Tzpp0crtSvl/vMtffLd/vhP4TuMhVQwSNTYlAko+36B4x5/BuC1/XrDVaNm3YNE78j5A0m+7BkwOXpk1hag/etrdu040Dm27CsQXHvQNpFoP1Ldz02ID1mlY1jPgRD2xAn9BqP2ID4LwXuvAwcHsFSdki5nwRUrY0KTzweqnP6HKtVh+wwA/HSXFUWOcEKQuYgsJvYmI+htfhpMkAgII1xEI4EZjJADcCIHL42+3PPhAkfKpJcKxqHKaRxxQJYcCK4W46xFwogLvpaNzn5cM08ETFSVcmcK+pqGW4pauX4EaU4L6GDSgfaJQNq8qDfpoUg9aCkF4rAK2VhTSJntAfyhR+1bDzPfOScWgtZzTPEY7wbyqyUmnhjiF/b6MjsOdnoORzwPsTGPkLjjUgJwRXH8HO70Ce/oCjdMMwvoTj7k3DaN0yjF/g+BMOktev3IMUjpenTDI5cZiYAqQPp4lXKKmSBMqo0CxVpsqXWCnX408IOA3YqbQJy3RdoN8ktgrotd6JMAh/R1XUooLRlsNUZdzLU8TZuL+k3B9GYVFHYcKR92F3eUKborqbJiFopI/Wl3fGarhJLxVVFYUx5u5o5v6zuJNjzF6tceRYlJaWwGOhIVN141jIqlnGQq+iEy/wwvmi8S4s9rOJ91sT8b6h4z3DyKp2KetvvOrG4v2GYi4XhdH7ueyzK2JeGsXis+smBud15HqYGJUTfsb8ykFJYcTYCm+yFBAd4cQ9I/zi4uLHIvEq3qRmEy86Ea9bQ5UccyRr3FnfLssI6I8bNY1Tdp9bKys75XEjWV+EndPjtVQw04v3wNkw15hg7hXN3IQj9IHI0m9UKu2Mzq3uZmkHy/bU6DDbxhaLhJvO3LuKufj3q+hxuM+qTP0jU1mRTp9D+HnA2zFLrOWnUPK1bGWbHwVhxNr4omUQONhRRdIVU/tfuHHCo/2vuv2PYVRfP0x5z2eRBasB5t9X0USmS80IoRbO23pLZgZE3bFB0ls2CDroOcg5qDmI+b2DKWXxr2oLaqRI+1DtKmtQsl2Vcu3qNsrekmiMl1ibV+uFanJDp9wSuQKB/1+w/ixF0zsdNWY3xAYI1DNaiYrL9E8FEaQYp8QOwfWvVyHOl0CZlagAjDfJFSglLESwY1PQomHCabQ2WpvN9dbGTnkIGEiQyxAv9dzE61JrP0NMq/B3Vbkce2GfgSGhXKu7ru8PlRGWIV/Vjhuz9ZaSNvnQZgGqtnX0VN2o/R1UNwiMLO3nVqGu57lcPc/n6vlVrGfsS3kTc7kiXtQdd/pC/R5z9D3ma2gZ/yHLxTkZ4de1xfwCbWkh5/E1ufgfVc2dlRkTAAA=";
+        let gzip = atob(window.dump_base64);
+        array = new Uint8Array(gzip.length);
+        for( let i = 0; i < gzip.length; i++ ) { array[i] = gzip.charCodeAt(i) }
+        let bin_array = (new Zlib.Gunzip(array)).decompress();
+        let reader = new PhpDump(bin_array.buffer);
+        window.dump = reader.read();
+        window.onload = ()=>window.renderReactDump(document.getElementById('root'), window.dump);
+    </script>
+</body>
+</html>
