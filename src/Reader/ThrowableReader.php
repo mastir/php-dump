@@ -27,7 +27,7 @@ class ThrowableReader implements ObjectReader
         ];
     }
 
-    private function getTrace(object $object) : array|string|null
+    private function getTrace(object $object): null|array|string
     {
         return match ($this->mode) {
             self::TRACE_FULL => $object->getTrace(),

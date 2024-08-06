@@ -2,8 +2,6 @@
 
 namespace Mastir\PhpDump;
 
-use Ds\Vector;
-
 /**
  * @template-implements \IteratorAggregate<int, PhpDumpScope>
  */
