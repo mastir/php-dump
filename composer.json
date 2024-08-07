@@ -22,6 +22,7 @@
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "*",
+        "php-parallel-lint/php-parallel-lint": "^1.4",
         "phpro/grumphp": "*",
         "phpstan/phpstan-strict-rules": "^1.0",
         "phpunit/php-code-coverage": "^10",

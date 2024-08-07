@@ -40,10 +40,10 @@ jobs:
         uses: "ramsey/composer-install@2.2.0"
 
       - name: "Check syntax (php-parallel-lint)"
-        run: "composer dev:lint:syntax"
+        run: "vendor/bin/parallel-lint ./src"
 
       - name: "Check coding standards (PHP_CodeSniffer)"
-        run: "composer dev:lint:style"
+        run: "vendor/bin/php-cs-fixer check"
 
   static-analysis:
     name: "Static analysis"
@@ -64,10 +64,10 @@ jobs:
         uses: "ramsey/composer-install@2.2.0"
 
       - name: "Statically analyze code (PHPStan)"
-        run: "composer dev:analyze:phpstan"
+        run: "vendor/bin/phpstan"
 
       - name: "Statically analyze code (Psalm)"
-        run: "composer dev:analyze:psalm -- --shepherd"
+        run: "vendor/bin/psalm"
 
   security-analysis:
     name: "Security analysis"
@@ -121,7 +121,7 @@ jobs:
         uses: "ramsey/composer-install@2.2.0"
 
       - name: "Run unit tests (PHPUnit)"
-        run: "composer dev:test:coverage:ci"
+        run: "vendor/bin/phpunit"
 
       - name: "Publish coverage report to Codecov"
         uses: "codecov/codecov-action@v3.1.4"
