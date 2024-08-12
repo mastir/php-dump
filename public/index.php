@@ -32,13 +32,15 @@ function level1($input){
     level2($input,1);
 }
 class ExceptionThrower{
+    public array $args;
     public function __construct(...$args)
     {
+        $this->args = $args;
         throw new Exception("Test exception thrown");
     }
 }
 ini_set('zend.exception_ignore_args', 0);
-$dump = new \Mastir\PhpDump\PhpDumpBuilder(mutators: [new \Mastir\PhpDump\Mutator\RefDepthLimit(2)]);
+$dump = new \Mastir\PhpDump\PhpDumpBuilder(mutators: [new \Mastir\PhpDump\Mutator\RefDepthLimit(3)]);
 $scope = false;
 try {
     $object = new StdClass;
