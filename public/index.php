@@ -38,7 +38,7 @@ class ExceptionThrower{
     }
 }
 ini_set('zend.exception_ignore_args', 0);
-$dump = new \Mastir\PhpDump\PhpDumpBuilder();
+$dump = new \Mastir\PhpDump\PhpDumpBuilder(mutators: [new \Mastir\PhpDump\Mutator\RefDepthLimit(2)]);
 $scope = false;
 try {
     $object = new StdClass;

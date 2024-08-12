@@ -2,6 +2,7 @@
 
 namespace Mastir\PhpDump;
 
+use Mastir\PhpDump\Mutator\ScopeArgumentsMutator;
 use Mastir\PhpDump\Reader\SimpleReader;
 use Mastir\PhpDump\Reader\ThrowableReader;
 
@@ -9,7 +10,7 @@ class PhpDumpBuilder
 {
     private array $includes = [];
 
-    public function __construct(public readonly PhpDump $dump = new PhpDump(), ?array $readers = null)
+    public function __construct(public readonly PhpDump $dump = new PhpDump(), ?array $readers = null, private readonly array $mutators = [])
     {
         if (!$readers) {
             $readers = [
@@ -30,6 +31,8 @@ class PhpDumpBuilder
 
     public function build(): string
     {
+        $this->dump->mutators = $this->mutators;
+
         return $this->dump->build($this->includes);
     }
 
@@ -97,7 +100,11 @@ class PhpDumpBuilder
                         $extras['code_line'] = $start;
                     }
                 }
-
+                foreach ($this->mutators as $mutator) {
+                    if ($mutator instanceof ScopeArgumentsMutator) {
+                        $mutator->onScopeArguments($scope, $args);
+                    }
+                }
                 $scope->addScope($title, $args, $extras);
             }
         } while ($withPrevious && $exception = $exception->getPrevious());

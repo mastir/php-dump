@@ -1,6 +1,7 @@
 const BLOCK_START = 0x1;
 const BLOCK_END = 0x2;
 const REF_BLOCK = 0x6;
+const INC_BLOCK = 0x7;
 const LINK = 0x5;
 const BLOCK_TYPES = 'abfionrsuvkq'.split('').reduce((c, v, i) => {
     c[v.charCodeAt(0)] = ['array', 'boolean', 'float', 'integer', 'object', 'null', 'resource', 'string', 'unknown', 'var', 'key', 'scope'][i];
@@ -27,7 +28,7 @@ class Block{
         if (this.value) return this.value;
         if (!this.__ref) return undefined;
         this.value = this.__ref();
-        if(this.type === 'string')this.value = this.value.value;
+        if(this.type === 'string' && typeof(this.value) === 'object')this.value = this.value.value;
         return this.value;
     }
 }
@@ -62,9 +63,27 @@ class Reader {
                 this.offset++;
                 let count = this.int();
                 let ref_offset = this.offset + (count * 4);
+                //we need to look ahead to detect include block size
+                let offset = this.offset;
+                this.offset = ref_offset;
+                let has_includes = this.ch() === INC_BLOCK;
+                if (has_includes){
+                    //we have includes
+                    let inc_count = this.int();
+                    ref_offset += inc_count * 8;
+                }
+                this.offset = offset;
                 this.links = [];
                 for (let i = 0; i < count; i++) {
                     this.links.push(ref_offset + this.int());
+                }
+                if (has_includes){
+                    if(this.ch() !== REF_BLOCK) throw "unable to read include block";
+                    let inc_count = this.int();
+                    for (let i = 0; i < inc_count; i++){
+                        let index = this.int();
+                        this.links[index] = ref_offset + this.int();
+                    }
                 }
                 break;
             } else {
@@ -120,6 +139,7 @@ class Reader {
         if (next === LINK) {
             let link = this.int();
             block.__ref = this.readLink.bind(this, link);
+            block.__link=link;
             next = this.ch();
         }
         block.type = BLOCK_TYPES[next] || 'unknown';

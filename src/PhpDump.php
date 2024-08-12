@@ -3,6 +3,10 @@
 namespace Mastir\PhpDump;
 
 use Ds\Vector;
+use Mastir\PhpDump\Mutator\FilterRef;
+use Mastir\PhpDump\Mutator\LimitRefCount;
+use Mastir\PhpDump\Mutator\Mutator;
+use Mastir\PhpDump\Mutator\Mutators;
 use Mastir\PhpDump\Reader\ObjectReader;
 
 /**
@@ -39,8 +43,7 @@ class PhpDump
     public const BLOCK_OPEN = "\x01";
     public const BLOCK_CLOSE = "\x02";
     public const REF_BLOCK = "\x06";
-    public int $size_limit = 500000; // 500kb
-    public int $preload_depth = 1;
+    public const INC_BLOCK = "\x07";
 
     public int $titleLengthLimit = 100;
 
@@ -48,6 +51,11 @@ class PhpDump
      * @var ObjectReader[]
      */
     public array $readers = [];
+
+    /**
+     * @var Mutator[]
+     */
+    public array $mutators = [];
 
     /**
      * @var Vector<PhpDumpScope>
@@ -101,29 +109,50 @@ class PhpDump
         $refs = '';
         $offset = 0;
         $count = 0;
-        foreach ($this->data as $ref) {
+        $index = 0;
+        $total = count($this->data);
+        $ref_filter = Mutators::ofType(FilterRef::class, $this->mutators);
+        $refs_limit = Mutators::ofType(LimitRefCount::class, $this->mutators);
+        $continue = $index < $total;
+        while ($continue) {
+            $ref = $this->data[$index];
             $block = $this->buildRefData($ref);
-            $refs .= $block;
-            $links .= $this->int($offset);
-            $offset += strlen($block);
-            ++$count;
+            $include_ref = true;
+            foreach ($ref_filter as $mutator) {
+                $include_ref &= $mutator->canIncludeRef($index, $ref, strlen($block));
+            }
+            if ($include_ref) {
+                $refs .= $block;
+                $links .= $this->int($offset);
+                $offset += strlen($block);
+                ++$count;
+            }
+            ++$index;
+            $continue = $index < $total;
+            foreach ($refs_limit as $mutator) {
+                $mutator->canContinue($continue, $index, $total, $count, $offset, $this->data->count());
+            }
         }
 
-        return $dump.self::REF_BLOCK.$this->int($count).$links.$refs;
-        //        $refs = new Vector();
-        //        $level_count = [0];
-        //        $level = 0;
-        //        $total_length = strlen($short);
-        //        do {
-        //            $level_count[++$level] = $this->data->count();
-        //            for($i = $level_count[$level-1]; $i < $level_count[$level]; $i++) {
-        //                $length = strlen($full);
-        //                if ($explain === null && (($length + $total_length) > $limit_size)) break;
-        //                $total_length += $length;
-        //                $refs->push($full);
-        //            }
-        //        } while ($level < $level_count);
-        //        return $short."\x06".$long;
+        $inc = '';
+        if ($include) {
+            $inc_count = 0;
+            $inc_links = '';
+            foreach ($include as $i) {
+                if ($i > $count && $i < $this->data->count()) {
+                    ++$inc_count;
+                    $block = $this->buildRefData($this->data[$i]);
+                    $inc_links .= $this->int($i);
+                    $inc_links .= $this->int($offset);
+                    $refs .= $block;
+                    $offset += strlen($block);
+                    ++$count;
+                }
+            }
+            $inc = self::INC_BLOCK.$this->int($count).$inc_links;
+        }
+
+        return $dump.self::REF_BLOCK.$this->int($count).$links.$inc.$refs;
     }
 
     public function buildRefData(array|object|string $value): string

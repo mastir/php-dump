@@ -18,7 +18,8 @@ const Code = function({code, line, code_line}){
 }
 
 const ArrayValue = function({item,close=()=>{}}){
-    const array = Array.from(item.value.entries());
+    if (!item) return 'UNDEFINED';
+    const array = Array.from(item.getValue().entries());
     return <div className="variable__value array open">
         <span className="accordion" onClick={close}>Array</span>
         <div className="array__items">
@@ -46,7 +47,12 @@ const ScalarValue = function({item}){
 const VariableValue = function ({item}){
     const ValueType = item.type === 'array' ? ArrayValue : (item.type === 'object') ? ObjectValue : ScalarValue;
     const [open, setOpen] = React.useState(false);
-    const is_extendable = ((['array', 'object', 'string'].indexOf(item.type) !== -1) && item.__ref !== undefined) || item.type === 'float';
+    const is_extendable =
+        (
+            (['array', 'object', 'string'].indexOf(item.type) !== -1)
+            && item.__ref !== undefined
+            && item.getValue() !== undefined
+        ) || item.type === 'float';
     return <span className={"variable__type type__"+item.type}>
 
             {open
@@ -57,6 +63,7 @@ const VariableValue = function ({item}){
             }
         </span>
 }
+
 
 const Variable = function({name,value, separator: separator = false}){
     return <div className={"variable"+(open?' open':'')}>
